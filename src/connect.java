@@ -9,7 +9,7 @@ import java.sql.PreparedStatement;
 public class connect {
 	static SQLiteDataSource ds = null;
 	
-	public static void connection() {
+public static void connection() {
         	
 	    try {
 	        ds = new SQLiteDataSource();
@@ -23,7 +23,7 @@ public class connect {
 	        
 	    }
 	}
-    public static void main(String[] args) {
+public static void main(String[] args) {
        Scanner scan = new Scanner(System.in);
        boolean repeat = false;
       do {
@@ -66,7 +66,6 @@ public class connect {
        case 3:
     	   connect update = new connect();
     	   try {
-    	//   Scanner s = new Scanner(System.in);
     	   System.out.println("enter empno");
     	   int empno = scan.nextInt();
     	   System.out.println("enter ename");
@@ -75,6 +74,21 @@ public class connect {
     	   int sal = scan.nextInt();
       	  //try {
       		update.update(empno,ename,sal);
+
+   		} catch (Exception exception) {
+   			// TODO Auto-generated catch block
+   			exception.printStackTrace();
+   		}
+      	 
+       	break;
+       	
+       case 4:
+    	   connect delete = new connect();
+    	   try {
+    	   System.out.println("enter empno");
+    	   int empno = scan.nextInt();
+    	   
+      		delete.delete(empno);
 
    		} catch (Exception exception) {
    			// TODO Auto-generated catch block
@@ -102,7 +116,7 @@ public class connect {
     
 
 public void display() throws Exception {
-       // String query = "SELECT * FROM EMP_CRUD";
+      
         
         try{
         	Connection connect=null;
@@ -133,21 +147,23 @@ public void display() throws Exception {
           }
 		
     }
+
+
 public  void insert(int empno, String ename, int sal)throws Exception
 {
 
-    Connection c = null;
+    Connection connect = null;
       Statement stmt = null;
       try {
         Class.forName("org.sqlite.JDBC");
-        c = DriverManager.getConnection("jdbc:sqlite:C:\\\\\\\\sqlite\\\\\\\\jdbc-crud\\\\\\\\EMP_CRUD.db");
-        c.setAutoCommit(false);
+        connect = DriverManager.getConnection("jdbc:sqlite:C:\\\\\\\\sqlite\\\\\\\\jdbc-crud\\\\\\\\EMP_CRUD.db");
+        connect.setAutoCommit(false);
         System.out.println("Opened database successfully");
 
-        stmt = c.createStatement();
+        stmt = connect.createStatement();
         String sql = "INSERT INTO EMP_CRUD (EMPLOYEE_NUMBER, EMPLOYEE_NAME, SALARY) VALUES(?,?,?)"; 
-        //stmt.executeUpdate(sql);
-        PreparedStatement pstmt = c.prepareStatement(sql);
+       
+        PreparedStatement pstmt = connect.prepareStatement(sql);
         
         pstmt.setInt(1, empno); 
         pstmt.setString(2, ename);
@@ -155,8 +171,8 @@ public  void insert(int empno, String ename, int sal)throws Exception
       
         pstmt.executeUpdate();
         stmt.close();
-        c.commit();
-        c.close();
+        connect.commit();
+        connect.close();
       } catch ( Exception e ) {
         System.err.println( e.getClass().getName() + ": " + e.getMessage() );
         System.exit(0);
@@ -168,22 +184,21 @@ public  void insert(int empno, String ename, int sal)throws Exception
 
 public void update(int empno, String ename, int sal )throws Exception
 {
-  Connection c = null;
-  Statement stmt = null;
+	Connection connect = null;
+	Statement stmt = null;
   try {
     Class.forName("org.sqlite.JDBC");
-    c = DriverManager.getConnection("jdbc:sqlite:C:\\\\\\\\\\\\\\\\sqlite\\\\\\\\\\\\\\\\jdbc-crud\\\\\\\\\\\\\\\\EMP_CRUD.db");
-    c.setAutoCommit(false);
+    connect = DriverManager.getConnection("jdbc:sqlite:C:\\\\\\\\\\\\\\\\sqlite\\\\\\\\\\\\\\\\jdbc-crud\\\\\\\\\\\\\\\\EMP_CRUD.db");
+    connect.setAutoCommit(false);
     System.out.println("Opened database successfully");
 
-    stmt = c.createStatement();
+    stmt = connect.createStatement();
     String sql = "UPDATE EMP_CRUD set SALARY = ? ,"
     		+"EMPLOYEE_NAME = ?"
     		+"where EMPLOYEE_NUMBER= ? ";
-  //  stmt.executeUpdate(sql);
-  //  c.commit();
+ 
 
-   PreparedStatement pstmt = c.prepareStatement(sql);
+    PreparedStatement pstmt = connect.prepareStatement(sql);
    
     pstmt.setInt(1, sal); 
     pstmt.setString(2, ename);
@@ -191,26 +206,47 @@ public void update(int empno, String ename, int sal )throws Exception
   
     pstmt.executeUpdate();
     
-/*   ResultSet resultset = stmt.executeQuery( "SELECT * FROM EMP_CRUD" );
-    while ( resultset.next() ) {
-       int EMPLOYEE_NUMBER = resultset.getInt("EMPLOYEE_NUMBER");
-       String  EMPLOYEE_NAME = resultset.getString("EMPLOYEE_NAME");
-       int SALARY = resultset.getInt("SALARY");
-       System.out.println( "EMPLOYEE_NUMBER : " + EMPLOYEE_NUMBER );
-       System.out.println( "EMPLOYEE_NAME : " + EMPLOYEE_NAME );
-       System.out.println( "SALARY : " + SALARY );
-       System.out.println();
-    }                   
-    resultset.close();*/
-  //  pstmt.close();
-    c.commit();
+
+    connect.commit();
     stmt.close();
-    c.close();
+    connect.close();
   } catch ( Exception e ) {       
     System.err.println( e.getClass().getName() + ": " + e.getMessage() );
     System.exit(0);
   }
-  System.out.println("updated sucessfully");
+  	System.out.println("updated sucessfully");
+}
+
+public void delete(int empno)throws Exception
+{
+	Connection connect = null;
+	Statement stmt = null;
+  try {
+    Class.forName("org.sqlite.JDBC");
+    connect = DriverManager.getConnection("jdbc:sqlite:C:\\\\\\\\\\\\\\\\sqlite\\\\\\\\\\\\\\\\jdbc-crud\\\\\\\\\\\\\\\\EMP_CRUD.db");
+    connect.setAutoCommit(false);
+    System.out.println("Opened database successfully");
+
+    stmt = connect.createStatement();
+    String sql = "DELETE FROM EMP_CRUD WHERE EMPLOYEE_NUMBER = ?";
+ 
+
+    PreparedStatement pstmt = connect.prepareStatement(sql);
+   
+   
+    pstmt.setInt(1, empno);
+  
+    pstmt.executeUpdate();
+    
+
+    connect.commit();
+    stmt.close();
+    connect.close();
+  } catch ( Exception e ) {       
+    System.err.println( e.getClass().getName() + ": " + e.getMessage() );
+    System.exit(0);
+  }
+  	System.out.println("deleted sucessfully");
 }
 
 
