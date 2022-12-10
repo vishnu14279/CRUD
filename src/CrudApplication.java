@@ -6,9 +6,9 @@ import java.sql.Statement;
 import java.util.*;
 import java.sql.PreparedStatement;
 public class CrudApplication {
-	private static final String DATABASE_URL = "jdbc:sqlite:C:\\sqlite\\jdbc-crud\\EMP_CRUD.db";
-
 	
+	private static final String DATABASE_URL = "jdbc:sqlite:C:\\sqlite\\SQLite_crud\\SQLite_crud";
+
 public static void main(String[] args) throws SQLException {
        Scanner scan = new Scanner(System.in);
        boolean repeat = false;
@@ -82,9 +82,9 @@ public static void main(String[] args) throws SQLException {
        }
        System.out.println();
        System.out.println("press y for previous menu, press any key to terminate");
-       char Char = scan.next().charAt(0);
+       char input = scan.next().charAt(0);
       
-      if(Char=='y') {
+      if(input=='y' || input =='Y') {
     	  repeat = true;
       }
       else
@@ -95,18 +95,15 @@ public static void main(String[] args) throws SQLException {
       while(repeat);
       scan.close();
      
-
     }
-    
-    
+     
 /***
  * 
  * @param dbConnection
  * @throws Exception
  */
 public void display(Connection dbConnection) throws Exception {
-	Class.forName("org.sqlite.JDBC");
-	
+
 	Statement stmt=dbConnection.createStatement();
     
     String query = "SELECT * FROM EMP_CRUD";
@@ -160,15 +157,13 @@ public  void insert(int empno, String ename, int sal, Connection dbConnection)th
  * @throws Exception
  */
 public void update(int empno, String ename, int sal, Connection dbConnection )throws Exception
-{
-	
+{	
     dbConnection.setAutoCommit(false);
 
     Statement stmt = dbConnection.createStatement();
     String sql = "UPDATE EMP_CRUD set SALARY = ? ,"
     		+"EMPLOYEE_NAME = ?"
     		+"where EMPLOYEE_NUMBER= ? ";
- 
 
     PreparedStatement pstmt = dbConnection.prepareStatement(sql);
    
@@ -193,8 +188,6 @@ public void update(int empno, String ename, int sal, Connection dbConnection )th
  */
 public void delete(int empno, Connection dbConnection)throws Exception
 {
-	
-
     Statement stmt = dbConnection.createStatement();
     String sql = "DELETE FROM EMP_CRUD WHERE EMPLOYEE_NUMBER = ?";
  
@@ -211,7 +204,6 @@ public void delete(int empno, Connection dbConnection)throws Exception
     stmt.close();
   	System.out.println("deleted sucessfully");
 }
-
 
 }
     
